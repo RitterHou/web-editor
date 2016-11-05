@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="js/vue.min.js"></script>
+</head>
+<body>
+<style>
+    .source {
+        width: 849px;
+        height: 286px;
+        font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+        font-size: 14px;
+        color: #555;
+    }
+</style>
+<div>
+    <textarea v-model="source" class="source"></textarea>
+    <button @click="preview">预览</button>
+    {{{ markdown }}}
+</div>
+<script src="js/Parser.js"></script>
+<script src="js/vue-resource.min.js"></script>
+<script>
+    var parser = new HyperDown; // Markdown 解析器
+    new Vue({
+        el: 'div',
+        data: {
+            source: localStorage.source,
+            markdown: localStorage.markdown
+        },
+        methods: {
+            preview: function () {
+                this.markdown = parser.makeHtml(this.source)
+                localStorage.source = this.source
+                localStorage.markdown = this.markdown
+            },
+        }
+    })
+
+    /**
+     * 功能1：添加 TAB 键缩进功能
+     * 功能2：添加换行时自动缩进对齐功能
+     */
+    var el = document.querySelector('textarea');
+    el.addEventListener("keydown", function(e) {
+        var keyCode = e.keyCode || e.which;
+
+        if (keyCode === 9) {
+            var tab = '    '; // 按下 TAB 时所插入的实际内容
+
+            var start = el.selectionStart,
+                end = el.selectionEnd, 
+                value = el.value;
+
+            var lineStart = value.lastIndexOf('\n', start),
+                lineEnd = value.indexOf('\n', end),
+                offset = 0;
+
+            if (lineStart === -1) lineStart = 0;
+            if (lineEnd === -1) lineEnd = value.length;
+
+            if (lineStart === lineEnd);
+            else if (lineStart !== 0) lineStart += 1;
+
+            lines = value.substring(lineStart, lineEnd).split('\n');
+            // console.log([lineStart, lineEnd], lines);
+
+            if (lines.length > 1) {
+                offset = lines.length * tab.length;
+                lines = tab + lines.join('\n' + tab);
+
+                el.value = value.substring(0, lineStart) + lines + value.substring(lineEnd);
+
+                el.selectionStart = start + 1;
+                el.selectionEnd = end + offset;
+            } else {
+                offset = tab.length;
+                lines = lines[0];
+
+                el.value = value.substring(0, start) + tab + value.substring(end);
+
+                el.selectionStart = el.selectionEnd = start + offset;
+            }
+
+            e.preventDefault();
+        }
+
+        if (keyCode === 13) {
+            var start = el.selectionStart,
+                value = el.value;
+
+            var isWrap = false; // 记录光标所处的位置是否是换行符
+            if (value[start] == '\n') {
+                start -= 1; // 如果是一行的最后一个字符，那么需要减一
+                isWrap = true;
+            }
+
+            var lineStart = value.lastIndexOf('\n', start);
+            if (isWrap) start += 1; // 如果 start 的值被修改过，则把其再改回来
+
+            if (lineStart === -1) lineStart = 0;
+            if (lineStart !== 0) lineStart += 1;
+            
+            var pointer = lineStart;
+            var blank = '';
+            while (value[pointer] == '\t' || value[pointer] == ' ') { // 获取到当前行的行前空白信息
+                blank += value[pointer];
+                pointer += 1;
+            }
+
+            el.value = value.substring(0, start) + '\n' + blank + value.substring(start, value.length);
+            el.selectionStart = el.selectionEnd = start + 1 + blank.length;
+
+            e.preventDefault();
+        }
+    })
+</script>
+</body>
+</html>
