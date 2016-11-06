@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="css/highlight/default.css">
     <script src="js/vue.min.js"></script>
 </head>
 <body>
@@ -16,15 +17,22 @@
         font-size: 14px;
         color: #555;
     }
+    pre code {
+        font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+        font-size: 14px;
+    }
 </style>
 <div>
     <textarea v-model="source" class="source"></textarea>
     <button @click="preview">预览</button>
     {{{ markdown }}}
 </div>
+<script src="js/highlight.pack.js"></script>
 <script src="js/markdown-parser.min.js"></script>
 <script src="js/vue-resource.min.js"></script>
 <script>
+    hljs.initHighlightingOnLoad(); // 代码高亮插件初始化
+
     var parser = new HyperDown; // Markdown 解析器
     new Vue({
         el: 'div',
