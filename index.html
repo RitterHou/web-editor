@@ -26,17 +26,11 @@
         color: #555;
     }
     .preview {
-        width: 98%;
-        margin: auto;
-        margin-top: 5px;
-    }
-    .preview div {
         float: right;
+        margin-right: 1%;
     }
-    .preview div span {
-        display: none;
-        font-size: 5px;
-        margin-right: 5px;
+    .preview button {
+        font-size: 15px;
     }
     .markdown {
         font-family: Menlo,Monaco,Consolas,Courier New,monospace;
@@ -44,6 +38,7 @@
         color: #040404;
         width: 98%;
         margin: auto;
+        margin-top: 30px;
         padding: 0 4px;
     }
     .markdown p {
@@ -90,13 +85,6 @@
     </div>
     <div class="preview">
         <button>预览</button>
-        <div>
-            <span>草稿已保存</span>
-            <select>
-                <option value="markdown">markdown</option>
-                <option value="text">text</option>
-            </select>
-        </div>
     </div>
     <div class="markdown"></div>
 </div>
@@ -105,45 +93,10 @@
 <script src="js/jquery-3.1.1.slim.min.js"></script>
 <script src="js/pangu.min.js"></script>
 <script>
-    autoSave() // 每一段时间就自动保存一次
-    function autoSave () {
-        var source = $('.source textarea').val()
-        if (source != '') {
-            localStorage.source = source
-            printAutoSaveInfo()
-        }
-        setTimeout(autoSave, 30 * 1000)
-    }
-
-    function printAutoSaveInfo () {
-        showAutoSaveInfo()
-        setTimeout(hideAutoSaveInfo, 5 * 1000)
-    }
-
-    function showAutoSaveInfo () {
-        $('.preview div span').show()
-    }
-
-    function hideAutoSaveInfo () {
-        $('.preview div span').hide()
-    }
-
-    // hljs.initHighlightingOnLoad(); // 代码高亮插件初始化
-
-    $('.source textarea').val(localStorage.source);
-    // $('.markdown').html(localStorage.markdown);
-    // pangu.spacingPage(); // 在中英文之间自动加上空格
-
     var parser = new HyperDown; // Markdown 解析器
     $('button').click(function(){
         var source = $('.source textarea').val();
-        var markdown = null;
-        // 判断是否使用 Markdown 语法
-        if ($('.preview div select').val() == 'text') {
-            markdown = ('<p>' + source.split('\n').join('</p><p>') + '</p>').split(' ').join('&nbsp;');
-        } else {
-            markdown = parser.makeHtml(source);
-        }
+        var markdown = parser.makeHtml(source);
         $('.markdown').html(markdown);
         // 对每个代码片段设置样式
         $('pre code').each(function(i, block) {
@@ -151,8 +104,7 @@
         });
         // 在中英文之间自动加上空格
         pangu.spacingPage();
-        localStorage.source = source;
-        // localStorage.markdown = markdown;
+        console.log(markdown)
     });
 
     /**
