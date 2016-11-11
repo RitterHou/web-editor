@@ -33,7 +33,7 @@
         font-size: 15px;
     }
     .markdown {
-        font-family: Menlo,Monaco,Consolas,Courier New,monospace;
+        font-family: "Helvetica Neue","Luxi Sans","DejaVu Sans",Tahoma,"Hiragino Sans GB","Microsoft Yahei",sans-serif;
         font-size: 14px;
         color: #040404;
         width: 98%;
@@ -58,6 +58,13 @@
     pre code {
         font-family: Menlo,Monaco,Consolas,Courier New,monospace;
         line-height: normal;
+    }
+    p code {
+        font-size: 85%;
+        background-color: rgba(252,41,41,0.12);
+        border-radius: 3px;
+        color: #d23f31;
+        padding: 0.2em 0.4em;
     }
     /* 引用样式 */
     blockquote {
@@ -104,7 +111,6 @@
         });
         // 在中英文之间自动加上空格
         pangu.spacingPage();
-        console.log(markdown)
     });
 
     /**
