@@ -824,8 +824,8 @@
         };
       })(this));
       str = trim(lines.join("\n"));
-      str = str.replace(/(\n\s*){2,}/g, '</p><p>');
       str = str.replace(/\n/g, '<br>');
+      str = str.replace(/(\n\s*){2,}/g, '</p><p>');
       if (str.match(/^\s*$/)) {
         return '';
       } else {
