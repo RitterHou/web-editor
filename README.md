@@ -1,1 +1,1 @@
-<https://ritterhou.github.io/web-editor/>
+<https://www.nosuchfield.com/web-editor/>
